@@ -1,0 +1,8 @@
+.Playground {
+	display: flex;
+	justify-content: center;
+}
+
+.PlaygroundItem {
+	margin: 20px;
+}

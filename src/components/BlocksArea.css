@@ -1,0 +1,18 @@
+.Container {
+	width: 520px;
+	height: 520px;
+	border: 2px solid red;
+	margin: auto;
+}
+
+.GridContainer {
+	width: 100%;
+	height: 100%;
+}
+
+.GridItem {
+	width: 20px;
+	height: 20px;
+	position: 'relative';
+	cursor: pointer;
+}

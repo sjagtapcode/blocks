@@ -1,0 +1,42 @@
+.Operations {
+	display: flex;
+	flex-direction: column;
+}
+
+.button {
+	border: none;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	padding: 10px 20px;
+	width: 100px;
+	cursor: pointer;
+	font-weight: bold;
+	border: 2px solid white;
+}
+
+.button:hover {
+	border: 2px solid yellow;
+}
+
+.addButton {
+	background-color: white;
+	color: red;
+}
+
+.button:active {
+	background-color: yellow;
+	color: red;
+}
+
+
+.toggleButtonPause {
+	background-color: green;
+}
+
+.toggleButtonPlay {
+	background-color: red;
+}

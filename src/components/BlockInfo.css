@@ -1,0 +1,13 @@
+.SelectedBlock {
+	color: white;
+}
+
+.Error {
+	color: red;
+	height: 100px;
+}
+
+.Keylist {
+	text-align: start;
+	color: white;
+}
