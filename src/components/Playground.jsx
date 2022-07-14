@@ -25,7 +25,7 @@ const Playground = () => {
       newBlocks.push({
         id,
         X: getRandomNumber(MAX_WIDTH / SPEED) * SPEED,
-        Y: Math.floor(Math.random() * (MAX_HEIGHT / SPEED)) * SPEED,
+        Y: getRandomNumber(MAX_HEIGHT / SPEED) * SPEED,
       });
       handleSelectBlock(id);
       return newBlocks;
