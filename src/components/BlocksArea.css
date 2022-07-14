@@ -13,6 +13,5 @@
 .GridItem {
 	width: 20px;
 	height: 20px;
-	position: 'relative';
 	cursor: pointer;
 }

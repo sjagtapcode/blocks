@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import BlocksArea from './BlocksArea';
 import BlockInfo from './BlockInfo';
 import Operations from './Operations';
@@ -16,7 +16,6 @@ const Playground = () => {
   ]);
   const [selectedBlock, setSelectedBlock] = useState(0);
   const [error, setError] = useState('');
-  const selectedBlockRef = useRef(0);
   const [toggleBlocks, setToggleBlocks] = useState(true);
 
   const handleAddBlock = () => {
@@ -34,85 +33,87 @@ const Playground = () => {
   };
   const handleSelectBlock = (id) => {
     setSelectedBlock(id);
-    selectedBlockRef.current = id;
   };
-  const handleKeyPress = useCallback((event) => {
-    setError('');
-    const currentSelectedBlock = selectedBlockRef?.current || 0;
-    if (currentSelectedBlock === 0) {
-      setError('No Block Selected!');
-      return;
-    }
-    switch (event?.key) {
-      case Keys.S: // move down
-      case Keys.s: // move down
-        setBlocks((prevBlocks) => {
-          const newBlocks = prevBlocks.map((block) =>
-            block?.id === currentSelectedBlock
-              ? {
-                  ...block,
-                  Y: minMax(block.Y + SPEED, 0, MAX_HEIGHT),
-                }
-              : block
-          );
-          return newBlocks;
-        });
-        break;
-      case Keys.W: // move up
-      case Keys.w: // move up
-        setBlocks((prevBlocks) => {
-          const newBlocks = prevBlocks.map((block) =>
-            block?.id === currentSelectedBlock
-              ? {
-                  ...block,
-                  Y: minMax(block.Y - SPEED, 0, MAX_HEIGHT),
-                }
-              : block
-          );
-          return newBlocks;
-        });
-        break;
-      case Keys.A: // move left
-      case Keys.a: // move left
-        setBlocks((prevBlocks) => {
-          const newBlocks = prevBlocks.map((block) =>
-            block?.id === currentSelectedBlock
-              ? {
-                  ...block,
-                  X: minMax(block.X - SPEED, 0, MAX_WIDTH),
-                }
-              : block
-          );
-          return newBlocks;
-        });
-        break;
-      case Keys.D: // move right
-      case Keys.d: // move right
-        setBlocks((prevBlocks) => {
-          const newBlocks = prevBlocks.map((block) =>
-            block?.id === currentSelectedBlock
-              ? {
-                  ...block,
-                  X: minMax(block.X + SPEED, 0, MAX_WIDTH),
-                }
-              : block
-          );
-          return newBlocks;
-        });
-        break;
-      case Keys.DELETE: // delete box
-        setBlocks((prevBlocks) => {
-          const newBlocks = [...prevBlocks].filter(
-            ({ id }) => id !== currentSelectedBlock
-          );
-          handleSelectBlock(0);
-          return newBlocks;
-        });
-        break;
-      default:
-        setError('Invalid Keypress!');
-    }
-  }, []);
+  const handleKeyPress = useCallback(
+    (event) => {
+      setError('');
+      const currentSelectedBlock = selectedBlock || 0;
+      if (currentSelectedBlock === 0) {
+        setError('No Block Selected!');
+        return;
+      }
+      switch (event?.key) {
+        case Keys.S: // move down
+        case Keys.s: // move down
+          setBlocks((prevBlocks) => {
+            const newBlocks = prevBlocks.map((block) =>
+              block?.id === currentSelectedBlock
+                ? {
+                    ...block,
+                    Y: minMax(block.Y + SPEED, 0, MAX_HEIGHT),
+                  }
+                : block
+            );
+            return newBlocks;
+          });
+          break;
+        case Keys.W: // move up
+        case Keys.w: // move up
+          setBlocks((prevBlocks) => {
+            const newBlocks = prevBlocks.map((block) =>
+              block?.id === currentSelectedBlock
+                ? {
+                    ...block,
+                    Y: minMax(block.Y - SPEED, 0, MAX_HEIGHT),
+                  }
+                : block
+            );
+            return newBlocks;
+          });
+          break;
+        case Keys.A: // move left
+        case Keys.a: // move left
+          setBlocks((prevBlocks) => {
+            const newBlocks = prevBlocks.map((block) =>
+              block?.id === currentSelectedBlock
+                ? {
+                    ...block,
+                    X: minMax(block.X - SPEED, 0, MAX_WIDTH),
+                  }
+                : block
+            );
+            return newBlocks;
+          });
+          break;
+        case Keys.D: // move right
+        case Keys.d: // move right
+          setBlocks((prevBlocks) => {
+            const newBlocks = prevBlocks.map((block) =>
+              block?.id === currentSelectedBlock
+                ? {
+                    ...block,
+                    X: minMax(block.X + SPEED, 0, MAX_WIDTH),
+                  }
+                : block
+            );
+            return newBlocks;
+          });
+          break;
+        case Keys.DELETE: // delete box
+          setBlocks((prevBlocks) => {
+            const newBlocks = [...prevBlocks].filter(
+              ({ id }) => id !== currentSelectedBlock
+            );
+            handleSelectBlock(0);
+            return newBlocks;
+          });
+          break;
+        default:
+          setError('Invalid Keypress!');
+      }
+    },
+    [selectedBlock]
+  );
 
   const handleToggleBlocks = useCallback(() => {
     if (toggleBlocks) window.removeEventListener('keydown', handleKeyPress);
