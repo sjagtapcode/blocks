@@ -4,20 +4,23 @@ import React from 'react';
 const BlocksArea = ({ blocks, selectedBlock, handleSelectBlock }) => (
   <div className='Container'>
     <div className='GridContainer'>
-      {blocks.map((block) => (
-        <div
-          key={block.id}
-          className='GridItem'
-          style={{
-            background: selectedBlock === block.id ? 'yellow' : 'white',
-            marginLeft: block.X,
-            marginTop: block.Y,
-            position: 'absolute',
-            zIndex: block.id,
-          }}
-          onClick={() => handleSelectBlock(block.id)}
-        />
-      ))}
+      {Object.keys(blocks).map((blockId) => {
+        const block = blocks[blockId];
+        return (
+          <div
+            key={blockId}
+            className='GridItem'
+            style={{
+              background: selectedBlock === blockId ? 'yellow' : 'white',
+              marginLeft: block.X,
+              marginTop: block.Y,
+              position: 'absolute',
+              zIndex: blockId,
+            }}
+            onClick={() => handleSelectBlock(blockId)}
+          />
+        );
+      })}
     </div>
   </div>
 );

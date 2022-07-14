@@ -7,30 +7,27 @@ import { MAX_HEIGHT, MAX_WIDTH, SPEED, Keys } from '../utils/constants';
 import { minMax, getRandomNumber } from '../utils';
 
 const Playground = () => {
-  const [blocks, setBlocks] = useState([
-    {
-      id: Date?.now(),
+  const [blocks, setBlocks] = useState({
+    [Date?.now()]: {
       X: 0,
       Y: 0,
     },
-  ]);
+  });
   const [selectedBlock, setSelectedBlock] = useState(0);
   const [error, setError] = useState('');
   const selectedBlockRef = useRef(0);
   const [toggleBlocks, setToggleBlocks] = useState(true);
 
   const handleAddBlock = () => {
-    setBlocks((prev) => {
-      const newBlocks = [...prev];
-      const id = Date?.now();
-      newBlocks.push({
-        id,
+    const id = Date?.now();
+    setBlocks((prev) => ({
+      ...prev,
+      [id]: {
         X: getRandomNumber(MAX_WIDTH / SPEED) * SPEED,
         Y: getRandomNumber(MAX_HEIGHT / SPEED) * SPEED,
-      });
-      handleSelectBlock(id);
-      return newBlocks;
-    });
+      },
+    }));
+    // handleSelectBlock(id);
   };
   const handleSelectBlock = (id) => {
     setSelectedBlock(id);
@@ -46,66 +43,67 @@ const Playground = () => {
     switch (event?.key) {
       case Keys.S: // move down
       case Keys.s: // move down
-        setBlocks((prevBlocks) => {
-          const newBlocks = prevBlocks.map((block) =>
-            block?.id === currentSelectedBlock
-              ? {
-                  ...block,
-                  Y: minMax(block.Y + SPEED, 0, MAX_HEIGHT),
-                }
-              : block
-          );
-          return newBlocks;
-        });
+        setBlocks((prevBlocks) => ({
+          ...prevBlocks,
+          [currentSelectedBlock]: {
+            X: prevBlocks[currentSelectedBlock]?.X,
+            Y: minMax(
+              prevBlocks[currentSelectedBlock]?.Y + SPEED,
+              0,
+              MAX_HEIGHT
+            ),
+          },
+        }));
         break;
       case Keys.W: // move up
       case Keys.w: // move up
-        setBlocks((prevBlocks) => {
-          const newBlocks = prevBlocks.map((block) =>
-            block?.id === currentSelectedBlock
-              ? {
-                  ...block,
-                  Y: minMax(block.Y - SPEED, 0, MAX_HEIGHT),
-                }
-              : block
-          );
-          return newBlocks;
-        });
+        setBlocks((prevBlocks) => ({
+          ...prevBlocks,
+          [currentSelectedBlock]: {
+            X: prevBlocks[currentSelectedBlock]?.X,
+            Y: minMax(
+              prevBlocks[currentSelectedBlock]?.Y - SPEED,
+              0,
+              MAX_HEIGHT
+            ),
+          },
+        }));
         break;
       case Keys.A: // move left
       case Keys.a: // move left
-        setBlocks((prevBlocks) => {
-          const newBlocks = prevBlocks.map((block) =>
-            block?.id === currentSelectedBlock
-              ? {
-                  ...block,
-                  X: minMax(block.X - SPEED, 0, MAX_WIDTH),
-                }
-              : block
-          );
-          return newBlocks;
-        });
+        setBlocks((prevBlocks) => ({
+          ...prevBlocks,
+          [currentSelectedBlock]: {
+            Y: prevBlocks[currentSelectedBlock]?.Y,
+            X: minMax(
+              prevBlocks[currentSelectedBlock]?.X - SPEED,
+              0,
+              MAX_HEIGHT
+            ),
+          },
+        }));
         break;
       case Keys.D: // move right
       case Keys.d: // move right
-        setBlocks((prevBlocks) => {
-          const newBlocks = prevBlocks.map((block) =>
-            block?.id === currentSelectedBlock
-              ? {
-                  ...block,
-                  X: minMax(block.X + SPEED, 0, MAX_WIDTH),
-                }
-              : block
-          );
-          return newBlocks;
-        });
+        setBlocks((prevBlocks) => ({
+          ...prevBlocks,
+          [currentSelectedBlock]: {
+            Y: prevBlocks[currentSelectedBlock]?.Y,
+            X: minMax(
+              prevBlocks[currentSelectedBlock]?.X + SPEED,
+              0,
+              MAX_HEIGHT
+            ),
+          },
+        }));
         break;
       case Keys.DELETE: // delete box
-        setBlocks((prevBlocks) => {
-          const newBlocks = [...prevBlocks].filter(
-            ({ id }) => id !== currentSelectedBlock
-          );
+        setBlocks((prev) => {
           handleSelectBlock(0);
+          const newBlocks = {
+            ...prev,
+          };
+          delete newBlocks[currentSelectedBlock];
           return newBlocks;
         });
         break;
@@ -125,7 +123,7 @@ const Playground = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [handleKeyPress]);
+  }, []);
 
   return (
     <div className='Playground'>
